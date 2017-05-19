@@ -21,7 +21,7 @@ services:
     build: .
     container_name: hive-server
     volumes:
-      - ./sampledata:/sampledata
+      - ../sampledata:/sampledata
     env_file:
       - ./hadoop-hive.env
     environment:
