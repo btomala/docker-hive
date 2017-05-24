@@ -8,6 +8,7 @@ ENV HIVE_VERSION 2.1.1
 ENV HIVE_HOME /opt/hive
 ENV PATH $HIVE_HOME/bin:$PATH
 ENV HADOOP_HOME /opt/hadoop-$HADOOP_VERSION
+ENV SQOOP_HOME /opt/sqoop
 
 WORKDIR /opt
 
@@ -18,6 +19,11 @@ RUN apt-get update && apt-get install -y wget procps && \
 	mv apache-hive-$HIVE_VERSION-bin hive && \
 	wget https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
 	rm apache-hive-$HIVE_VERSION-bin.tar.gz && \
+	wget http://ftp.ps.pl/pub/apache/sqoop/1.99.7/sqoop-1.99.7-bin-hadoop200.tar.gz && \
+	tar -xzvf sqoop-1.99.7-bin-hadoop200.tar.gz && \
+	mv sqoop-1.99.7-bin-hadoop200/ sqoop && \
+	rm sqoop-1.99.7-bin-hadoop200.tar.gz && \
+	cp $HIVE_HOME/lib/postgresql-jdbc.jar sqoop/lib && \
 	apt-get --purge remove -y wget && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
