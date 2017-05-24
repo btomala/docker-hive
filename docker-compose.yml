@@ -10,6 +10,9 @@ services:
       - CLUSTER_NAME=test
     env_file:
       - ./hadoop-hive.env
+    ports:
+      - 50070:50070
+
   datanode:
     image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
     container_name: datanode
@@ -17,6 +20,9 @@ services:
       - /tmp/hdoop/data/datanode:/hadoop/dfs/data
     env_file:
       - ./hadoop-hive.env
+    ports:
+      - 50075:50075
+
   hive-server:
     build: .
     container_name: hive-server
@@ -28,11 +34,17 @@ services:
       - "HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore"
     ports:
       - "10000:10000"
+
   hive-metastore:
     build: .
     container_name: hive-metastore
     env_file:
       - ./hadoop-hive.env
     command: /opt/hive/bin/hive --service metastore
+
   hive-metastore-postgresql:
     image: bde2020/hive-metastore-postgresql:2.1.0
+    volumes:
+      - ../sampledata:/sampledata
+    ports:
+      - 5432:5432      
